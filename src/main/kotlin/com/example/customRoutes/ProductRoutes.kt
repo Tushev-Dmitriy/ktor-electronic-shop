@@ -37,43 +37,6 @@ fun Route.productRoutes(
             }
         }
 
-        get(PRODUCTS) {
-            try {
-                val products = db.getAllProducts()
-                call.respond(HttpStatusCode.OK,products)
-            } catch (e:Exception) {
-                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
-            }
-        }
-
-        get(FIND_PRODUCTS_ID) {
-            try {
-                val id = call.request.queryParameters["id"]!!
-                if (db.checkProductById(id)) {
-                    val products = db.findProductById(id)
-                    call.respond(HttpStatusCode.OK,products)
-                } else {
-                    call.respond(HttpStatusCode.Conflict, SimpleResponse(false,"Product doesn't exist"))
-                }
-            } catch (e:Exception) {
-                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
-            }
-        }
-
-        get(FIND_PRODUCTS_CATEGORY) {
-            try {
-                val category = call.request.queryParameters["category"]!!
-                if (db.checkProductByCategory(category)) {
-                    val products = db.findProductByCategory(category)
-                    call.respond(HttpStatusCode.OK,products)
-                } else {
-                    call.respond(HttpStatusCode.Conflict, SimpleResponse(false,"Product doesn't exist"))
-                }
-            } catch (e:Exception) {
-                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
-            }
-        }
-
         post(UPDATE_PRODUCTS) {
             val product = try {
                 call.receive<Product>()
@@ -112,6 +75,42 @@ fun Route.productRoutes(
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problem Occurred"))
             }
+        }
+    }
+    get(PRODUCTS) {
+        try {
+            val products = db.getAllProducts()
+            call.respond(HttpStatusCode.OK,products)
+        } catch (e:Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
+        }
+    }
+
+    get(FIND_PRODUCTS_ID) {
+        try {
+            val id = call.request.queryParameters["id"]!!
+            if (db.checkProductById(id)) {
+                val products = db.findProductById(id)
+                call.respond(HttpStatusCode.OK,products)
+            } else {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false,"Product doesn't exist"))
+            }
+        } catch (e:Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
+        }
+    }
+
+    get(FIND_PRODUCTS_CATEGORY) {
+        try {
+            val category = call.request.queryParameters["category"]!!
+            if (db.checkProductByCategory(category)) {
+                val products = db.findProductByCategory(category)
+                call.respond(HttpStatusCode.OK,products)
+            } else {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false,"Product doesn't exist"))
+            }
+        } catch (e:Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problem Occurred")
         }
     }
 }
